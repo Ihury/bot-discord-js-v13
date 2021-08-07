@@ -14,14 +14,4 @@ const client = new Client({
     ]
 })
 
-client.once('ready', function () {
-    console.log(`Bot ${client.user.tag} logado com sucesso com ${client.guilds.cache.size} servidores.`)
-})
-
-client.on('messageCreate', function (message) {
-    if (message.content === 'oi') {
-        message.reply('Oi!')
-    }
-})
-
 client.login(process.env.BOT_TOKEN)

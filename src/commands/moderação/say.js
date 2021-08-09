@@ -1,6 +1,6 @@
 const Command = require('../../structures/Command')
 
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js')
 
 module.exports = class extends Command {
     constructor(client) {
@@ -8,12 +8,6 @@ module.exports = class extends Command {
             name: 'falar',
             description: 'Faz com que o bot diga alguma mensagem.',
             options: [
-                {
-                    name: 'canal',
-                    type: 'CHANNEL',
-                    description: 'Canal onde a mensagem será enviada.',
-                    required: true
-                },
                 {
                     name: 'mensagem',
                     type: 'STRING',
@@ -24,20 +18,58 @@ module.exports = class extends Command {
         })
     }
 
-    run = (interaction) => {
-        const canal = interaction.options.getChannel('canal')
-        if (!['GUILD_TEXT', 'GUILD_ANNOUCEMENTS'].includes(canal.type)) return interaction.reply({ content: 'ERRO | Informe um canal de texto ou de anúncios!', ephemeral: true })
+    run = async (interaction) => {
+        if (!interaction.member.permissions.has('MANAGE_MESSAGES')) return interaction.reply({ content: 'Você não tem permissão para usar este comando!', ephemeral: true })
 
-        const texto = interaction.options.getString('mensagem')
+        const channels = interaction.guild.channels.cache
+            .filter(c => c.type === 'GUILD_TEXT' && c.permissionsFor(this.client.user.id).has(['SEND_MESSAGES', 'EMBED_LINKS']) && c.permissionsFor(interaction.user.id).has('SEND_MESSAGES'))
 
-        const embed = new MessageEmbed()
-            .setTitle(`Uma mensagem foi enviada neste canal.`)
-            .setDescription(texto)
-            .setColor('#0000ff')
-            .setTimestamp()
+        if (!channels.size) return interaction.reply({ content: 'Não consigo enviar a mensagem em nenhum dos canais do servidor.', ephemeral: true })
 
-        canal.send({ embeds: [embed] })
-            .then(() => interaction.reply({ content: `Mensagem enviada com sucesso no canal \`${canal.name}\`.`, ephemeral: true }))
-            .catch(() => interaction.reply({ content: `ERRO | Erro ao tentar enviar a mensagem no canal.`, ephemeral: true }))
+        const actionRow = new MessageActionRow()
+            .addComponents([
+                new MessageSelectMenu()
+                    .setCustomId('channelSelect')
+                    .setPlaceholder('Selecione um canal')
+                    .addOptions(
+                        channels
+                            .map(c => {
+                                return {
+                                    label: c.name,
+                                    value: c.id
+                                }
+                            })
+                    )
+            ])
+
+        const reply = await interaction.reply({
+            content: '**Selecione abaixo o canal onde deseja enviar a mensagem**',
+            components: [actionRow],
+            fetchReply: true
+        })
+
+        const filter = (i) => i.user.id === interaction.user.id
+        const collector = reply.createMessageComponentCollector({ filter, max: 1, time: (3 * 60000) })
+
+        collector.on('collect', (i) => {
+            const idCanal = i.values[0]
+            const canal = interaction.guild.channels.cache.get(idCanal)
+
+            const texto = interaction.options.getString('mensagem')
+
+            const embed = new MessageEmbed()
+                .setTitle(`Uma mensagem foi enviada neste canal.`)
+                .setDescription(texto)
+                .setColor('#0000ff')
+                .setTimestamp()
+
+            canal.send({ embeds: [embed] })
+                .then(() => interaction.editReply({ content: `Mensagem enviada com sucesso no canal ${canal.toString()}.`, components: [] }))
+                .catch(() => interaction.editReply({ content: `ERRO | Erro ao tentar enviar a mensagem no canal.`, components: [] }))
+        })
+
+        collector.on('end', (collected, reason) => {
+            if (reason === 'time') interaction.editReply({ content: 'O tempo para informar o canal se esgotou!', components: [] })
+        })
     }
 }

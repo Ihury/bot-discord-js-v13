@@ -37,7 +37,7 @@ module.exports = class extends Command {
         })
 
         const filter = (b) => b.user.id === interaction.user.id
-        const collector = reply.createMessageComponentCollector({ filter, time: (15000) })
+        const collector = reply.createMessageComponentCollector({ filter, time: (10 * 60000) })
 
         collector.on('collect', (i) => {
             switch (i.customId) {

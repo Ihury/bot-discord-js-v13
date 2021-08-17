@@ -36,7 +36,7 @@ module.exports = class extends Command {
 
         const reason = interaction.options.getString('motivo') || 'Motivo não especificado.'
 
-        interaction.guild.members.kick(user, { reason })
+        interaction.guild.members.ban(user, { reason })
             .then(() => interaction.reply({ content: `Usuário \`${user.tag}\` expulso com sucesso!`, ephemeral: true }))
             .catch(() => interaction.reply({ content: 'Erro ao expulsar o usuário!', ephemeral: true }))
     }

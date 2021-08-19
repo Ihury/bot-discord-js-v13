@@ -41,7 +41,7 @@ module.exports = class extends Command {
             textChannel: interaction.channel.id
         })
 
-        if (player.state === 'DISCONNECTED') player.connect()
+        if (player.state !== 'CONNECTED') player.connect()
         player.queue.add(res.tracks[0])
 
         if (!player.playing && !player.paused) player.play()

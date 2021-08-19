@@ -24,7 +24,7 @@ module.exports = (client) => {
         })
         .on("queueEnd", player => {
             const channel = client.channels.cache.get(player.textChannel)
-            channel.send("A fila acabou.")
+            channel.send("A fila de músicas acabou.")
             player.destroy()
         })
 }

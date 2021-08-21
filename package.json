@@ -1,22 +1,25 @@
 {
   "name": "bot_aulas",
   "version": "1.0.0",
-  "description": "",
-  "engines": {
-    "node": "16.x"
-  },
   "main": "index.js",
+  "author": {
+  	"github": "https://github.com/Ihury"
+  },
+  "license": "ISC",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier --write \"src/**/*.js\" \"index.js\""
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "discord.js": "^13.0.0",
     "dotenv": "^10.0.0",
     "erela.js": "^2.3.3",
     "mongoose": "^5.13.6"
+  },
+  "devDependencies": {
+    "prettier": "^2.3.2"
+  },
+  "engines": {
+  	"node": "16.x"
   }
 }

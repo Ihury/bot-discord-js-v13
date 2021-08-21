@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": {
-  	"github": "https://github.com/Ihury"
+    "github": "https://github.com/Ihury"
   },
   "license": "ISC",
   "scripts": {
     "start": "node index.js",
-    "format": "prettier --write \"src/**/*.js\" \"index.js\""
+    "format": "prettier --write \"src/**/*.js\" \"index.js\"",
+    "lint": "eslint --fix \"src/**/*.js\" \"index.js\""
   },
   "dependencies": {
     "discord.js": "^13.0.0",
@@ -17,9 +18,16 @@
     "mongoose": "^5.13.6"
   },
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "eslint-plugin-promise": "^4.2.1",
     "prettier": "^2.3.2"
   },
   "engines": {
-  	"node": "16.x"
+    "node": "16.x"
   }
 }

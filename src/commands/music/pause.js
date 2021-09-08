@@ -16,7 +16,7 @@ module.exports = class extends Command {
         if (!memberVoiceChannel) return interaction.reply({ content: 'Você precisa estar em um canal de voz para usar este comando.', ephemeral: true })
         if (memberVoiceChannel.id !== player.voiceChannel) return interaction.reply({ content: 'Você precisa estar no mesmo canal de voz que eu.', ephemeral: true })
 
-        if (player.paused) return interaction.reply({ content: 'A música já está pausada!' })
+        if (player.paused) return interaction.reply({ content: 'A música já está pausada!', ephemeral: true })
 
         player.pause(true)
         interaction.reply({ content: 'Música pausada!' })

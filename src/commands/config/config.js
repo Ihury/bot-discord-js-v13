@@ -26,6 +26,26 @@ module.exports = class extends Command {
                             ]
                         }
                     ]
+                },
+                {
+                    type: 'SUB_COMMAND_GROUP',
+                    name: 'ticket',
+                    description: 'Configuração do sistema de tickets.',
+                    options: [
+                        {
+                            type: 'SUB_COMMAND',
+                            name: 'mensagem',
+                            description: 'Mensagem onde o usuário irá clicar para abrir o ticket.',
+                            options: [
+                                {
+                                    type: 'CHANNEL',
+                                    name: 'canal',
+                                    description: 'Canal de texto onde a mensagem será enviada.',
+                                    required: true
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         })

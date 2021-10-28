@@ -2,8 +2,12 @@
   "name": "bot_aulas",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "engines": {
+    "node": "16.x"
+  },
+  "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,6 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^13.0.0",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "erela.js": "^2.3.3",
+    "mongoose": "^5.13.6"
   }
 }

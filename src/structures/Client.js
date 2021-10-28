@@ -1,24 +1,27 @@
-require('dotenv').config();
-
 const { Client } = require('discord.js')
 
 const { readdirSync } = require('fs')
 const { join } = require('path')
 
+const { connect } = require('mongoose')
+const Models = require('../database/models/Models')
+
+const erelaManager = require('./Manager')
+
 module.exports = class extends Client {
-    constructor (options) {
-        super({
-            ...options,
-            intents: 32767
-        })
+    constructor(options) {
+        super(options)
 
         this.commands = []
         this.loadCommands()
         this.loadEvents()
+        this.manager = erelaManager(this)
     }
 
     registryCommands() {
-        this.guilds.cache.get('903304505389617254').commands.set(this.commands)
+        // temporária
+        this.guilds.cache.get('838228145865490493').commands.set(this.commands)
+        //this.application.commands.set(this.commands)
     }
 
     loadCommands(path = 'src/commands') {
@@ -48,6 +51,19 @@ module.exports = class extends Client {
 
                 this.on(evt.name, evt.run)
             }
-        } 
+        }
+    }
+
+    async connectToDatabase() {
+        const connection = await connect(process.env.MONGO_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false,
+            useCreateIndex: true
+        })
+
+        console.log('Database conectada com sucesso!')
+
+        this.db = { connection, ...Models }
     }
 }
